@@ -73,9 +73,17 @@ exports.resolveEndorsementRequest = async(req, res)=> {
         if(resolution == "approved") {
             const dataArray = await endorsements.fetchPeopleEndorsements(eId);
             await endorsements.updatePeople_onboarding(dataArray); 
+            res.status(200).send({
+                result,
+                message: 'request is approved'
+            });
         }
-
-
+        else{
+             await endorsements.updatePeopleEndorsements(eId);
+            res.status(200).send({
+        message: 'request is rejected'
+    });
+        }
       
     } catch (error) {
         res.status(400).send(error);
