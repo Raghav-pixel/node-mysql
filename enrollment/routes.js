@@ -8,7 +8,7 @@ var fs = require('fs');
 const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
  
-router.post('/upload', upload.upload, async(req, res)=> {
+router.post('/upload', auth.authenticate, upload.upload, async(req, res)=> {
 
     try {
 
