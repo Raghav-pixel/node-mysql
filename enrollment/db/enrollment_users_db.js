@@ -15,9 +15,6 @@ try {
         )
         values (? ? ? ? ? ?);`
        return await Promise.map(data, function(d) {
-           console.log(d, "arr");
-           console.log(d[3], "age");
-           console.log(d[1], "emp_id")
             return pool.query(insertQuery, [d.emp_id, d.dob, d.age, d.gender, d.email, d.phone])
         });
 } catch (error) {
