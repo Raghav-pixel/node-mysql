@@ -2,34 +2,6 @@ const endorsements = require('../db/endorsementsDB');
 
 const acceptedResolutionValues = ['rejected', 'approved'];
 
-exports.processEndorsementRequest = async(req, res)=> {
-    try {
-        const eId = req.body.eId;
-        const data = await endorsements.processEndorsement(eId);
-        res.status(200).send({
-            data,
-            message: 'endorsement is processing'
-        });   
-    } catch (error) {
-        res.status(400).send(error);
-    }
-}
-
-exports.resolveEndorsementRequest = async(req, res)=> {
-    const { resolution, eId } = req.body;
-
-    try {
-        if(!acceptedResolutionValues.includes(resolution)){
-            res.status(500).json({
-                errorMessage: 'Invalid resolution value passed'
-            });
-        }
-       await endorsements.updateEndorsements(resolution, eId); 
-    } catch (error) {
-        res.status(400).send(error);
-    }
-}
-
 exports.fetchAllEndorsements = async(req, res)=> {
     try {
         //limit as 20
@@ -70,5 +42,42 @@ exports.fetchEndorsement = async(req, res)=> {
         res.status(500).send({
             error: 'internal server error'
         });
+    }
+}
+
+
+exports.processEndorsementRequest = async(req, res)=> {
+    try {
+        const eId = req.body.eId;
+        const data = await endorsements.processEndorsement(eId);
+        res.status(200).send({
+            data,
+            message: 'endorsement is proccessed'
+        });   
+    } catch (error) {
+        res.status(400).send(error);
+    }
+}
+
+exports.resolveEndorsementRequest = async(req, res)=> {
+    const { resolution, eId } = req.body;
+
+    try {
+        if(!acceptedResolutionValues.includes(resolution)){
+            res.status(500).json({
+                errorMessage: 'Invalid resolution value passed'
+            });
+            return;
+        }
+
+        if(resolution == "approved") {
+            const dataArray = await endorsements.fetchPeopleEndorsements(eId);
+            await endorsements.updatePeople_onboarding(dataArray); 
+        }
+
+
+      
+    } catch (error) {
+        res.status(400).send(error);
     }
 }

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "cookie-parser": "~1.4.4",
     "csv-parse": "^4.11.1",
     "debug": "~2.6.9",

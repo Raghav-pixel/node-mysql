@@ -1,3 +1,5 @@
+const Promise = require('bluebird');
+
 const pool = require('../../connections/db');
 
 exports.processEndorsement = async(eId)=> {
@@ -56,3 +58,29 @@ exports.getDetailsFromEndorsementsTable = async(eId)=> {
         throw error;
     }
 }
+
+exports.fetchPeopleEndorsements = async(eId) => {
+    try {
+        const query = `select
+        name,
+        dob,
+        gender,
+        email,
+        phone
+        from endorsements_people
+        where endorsement_id = ?`;
+      
+        return await pool.query(query, [eId]);
+    } catch (error) {
+        throw 'unable to fetch people endorsements details';
+    }
+   
+  };
+
+  exports.updatePeople_onboarding = async() => {
+    try {
+        
+    } catch (error) {
+        throw 'updation failed'
+    }
+  }

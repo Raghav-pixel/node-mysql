@@ -17,8 +17,8 @@ router.post('/upload', upload.upload, async(req, res)=> {
          // remove the file from file system after parsing
             await unlinkAsync(req.file.path);
 
-            await insert.insertIntoDB(csvData);
-
+           const result = await insert.insertIntoPeople_onboarding(csvData);
+            console.log(result);
             res.status(200).send({
                 message: 'data successfully inserted into the database'
             });
